@@ -1,0 +1,254 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ServiceManagementModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <EntityType Name="tblMechanic">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MechanicName" Type="varchar" MaxLength="15" />
+    <Property Name="Email" Type="varchar" MaxLength="15" />
+    <Property Name="Password" Type="varchar" MaxLength="15" />
+    <Property Name="IsActive" Type="bit" />
+  </EntityType>
+  <EntityType Name="tblService">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Userid" Type="int" Nullable="false" />
+    <Property Name="VehicalId" Type="int" />
+    <Property Name="MechanicId" Type="int" />
+    <Property Name="Price" Type="decimal" Precision="5" Scale="2" />
+    <Property Name="ServiceName" Type="varchar" MaxLength="25" />
+    <Property Name="BookingDate" Type="datetime" />
+    <Property Name="IsBooked" Type="bit" />
+    <Property Name="IsAssigned" Type="bit" />
+    <Property Name="IsCompleted" Type="bit" />
+    <Property Name="CompletedDate" Type="datetime" />
+    <Property Name="IsActive" Type="bit" />
+  </EntityType>
+  <EntityType Name="tblUserRegistration">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Username" Type="varchar" MaxLength="10" />
+    <Property Name="Email" Type="varchar" MaxLength="25" />
+    <Property Name="Password" Type="varchar(max)" />
+    <Property Name="Firstname" Type="varchar" MaxLength="10" />
+    <Property Name="Middlename" Type="varchar" MaxLength="10" />
+    <Property Name="Lastname" Type="varchar" MaxLength="10" />
+    <Property Name="Addressline1" Type="varchar" MaxLength="25" />
+    <Property Name="Addressline2" Type="varchar" MaxLength="25" />
+    <Property Name="City" Type="varchar" MaxLength="10" />
+    <Property Name="State" Type="varchar" MaxLength="10" />
+    <Property Name="Country" Type="varchar" MaxLength="10" />
+    <Property Name="MobileNo" Type="varchar" MaxLength="12" />
+    <Property Name="Pincode" Type="varchar" MaxLength="6" />
+    <Property Name="isActive" Type="bit" />
+    <Property Name="Createddate" Type="datetime" />
+    <Property Name="Updateton" Type="datetime" />
+  </EntityType>
+  <EntityType Name="tblVehicalCompany">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="VehicalTypeId" Type="int" />
+    <Property Name="VehicalCompanyName" Type="varchar" MaxLength="25" />
+    <Property Name="isActive" Type="bit" />
+    <Property Name="CreatedDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="tblVehicalDetail">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Userid" Type="int" />
+    <Property Name="VehicalTypeId" Type="int" />
+    <Property Name="VehicalCompanyId" Type="int" />
+    <Property Name="VehicalName" Type="varchar" MaxLength="50" />
+    <Property Name="OwnerName" Type="varchar" MaxLength="15" />
+    <Property Name="RegistrationDate" Type="datetime" />
+    <Property Name="ChassisNo" Type="varchar" MaxLength="50" />
+    <Property Name="LicencePlateNo" Type="varchar" MaxLength="15" />
+    <Property Name="isActive" Type="bit" />
+    <Property Name="CreatedDate" Type="datetime" />
+    <Property Name="UpdatedOn" Type="datetime" />
+  </EntityType>
+  <EntityType Name="tblVehicalName">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="VehicalCompanyId" Type="int" />
+    <Property Name="VehicalName" Type="varchar" MaxLength="15" />
+    <Property Name="isActive" Type="bit" />
+    <Property Name="CreatedDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="tblVehicalType">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="VehicalType" Type="varchar" MaxLength="20" />
+    <Property Name="isActive" Type="bit" />
+  </EntityType>
+  <EntityType Name="Usertype">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserType" Type="varchar" MaxLength="10" />
+    <Property Name="isActive" Type="bit" />
+  </EntityType>
+  <Association Name="FK_tblService_tblMechanic">
+    <End Role="tblMechanic" Type="Self.tblMechanic" Multiplicity="0..1" />
+    <End Role="tblService" Type="Self.tblService" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tblMechanic">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="tblService">
+        <PropertyRef Name="MechanicId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tblService_tblUserRegistration">
+    <End Role="tblUserRegistration" Type="Self.tblUserRegistration" Multiplicity="1" />
+    <End Role="tblService" Type="Self.tblService" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tblUserRegistration">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="tblService">
+        <PropertyRef Name="Userid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tblService_tblVehicalDetail">
+    <End Role="tblVehicalDetail" Type="Self.tblVehicalDetail" Multiplicity="0..1" />
+    <End Role="tblService" Type="Self.tblService" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tblVehicalDetail">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="tblService">
+        <PropertyRef Name="VehicalId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tblVehicalCompany_tblVehicalType">
+    <End Role="tblVehicalType" Type="Self.tblVehicalType" Multiplicity="0..1" />
+    <End Role="tblVehicalCompany" Type="Self.tblVehicalCompany" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tblVehicalType">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="tblVehicalCompany">
+        <PropertyRef Name="VehicalTypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tblVehicalDetail_tblUserRegistration">
+    <End Role="tblUserRegistration" Type="Self.tblUserRegistration" Multiplicity="0..1" />
+    <End Role="tblVehicalDetail" Type="Self.tblVehicalDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tblUserRegistration">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="tblVehicalDetail">
+        <PropertyRef Name="Userid" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tblVehicalDetail_tblVehicalCompany">
+    <End Role="tblVehicalCompany" Type="Self.tblVehicalCompany" Multiplicity="0..1" />
+    <End Role="tblVehicalDetail" Type="Self.tblVehicalDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tblVehicalCompany">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="tblVehicalDetail">
+        <PropertyRef Name="VehicalCompanyId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tblVehicalDetail_tblVehicalType">
+    <End Role="tblVehicalType" Type="Self.tblVehicalType" Multiplicity="0..1" />
+    <End Role="tblVehicalDetail" Type="Self.tblVehicalDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tblVehicalType">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="tblVehicalDetail">
+        <PropertyRef Name="VehicalTypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_tblVehicalName_tblVehicalCompany">
+    <End Role="tblVehicalCompany" Type="Self.tblVehicalCompany" Multiplicity="0..1" />
+    <End Role="tblVehicalName" Type="Self.tblVehicalName" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="tblVehicalCompany">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="tblVehicalName">
+        <PropertyRef Name="VehicalCompanyId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="ServiceManagementModelStoreContainer">
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblMechanic" EntityType="Self.tblMechanic" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblService" EntityType="Self.tblService" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblUserRegistration" EntityType="Self.tblUserRegistration" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblVehicalCompany" EntityType="Self.tblVehicalCompany" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblVehicalDetail" EntityType="Self.tblVehicalDetail" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblVehicalName" EntityType="Self.tblVehicalName" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="tblVehicalType" EntityType="Self.tblVehicalType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Usertype" EntityType="Self.Usertype" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_tblService_tblMechanic" Association="Self.FK_tblService_tblMechanic">
+      <End Role="tblMechanic" EntitySet="tblMechanic" />
+      <End Role="tblService" EntitySet="tblService" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tblService_tblUserRegistration" Association="Self.FK_tblService_tblUserRegistration">
+      <End Role="tblUserRegistration" EntitySet="tblUserRegistration" />
+      <End Role="tblService" EntitySet="tblService" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tblService_tblVehicalDetail" Association="Self.FK_tblService_tblVehicalDetail">
+      <End Role="tblVehicalDetail" EntitySet="tblVehicalDetail" />
+      <End Role="tblService" EntitySet="tblService" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tblVehicalCompany_tblVehicalType" Association="Self.FK_tblVehicalCompany_tblVehicalType">
+      <End Role="tblVehicalType" EntitySet="tblVehicalType" />
+      <End Role="tblVehicalCompany" EntitySet="tblVehicalCompany" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tblVehicalDetail_tblUserRegistration" Association="Self.FK_tblVehicalDetail_tblUserRegistration">
+      <End Role="tblUserRegistration" EntitySet="tblUserRegistration" />
+      <End Role="tblVehicalDetail" EntitySet="tblVehicalDetail" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tblVehicalDetail_tblVehicalCompany" Association="Self.FK_tblVehicalDetail_tblVehicalCompany">
+      <End Role="tblVehicalCompany" EntitySet="tblVehicalCompany" />
+      <End Role="tblVehicalDetail" EntitySet="tblVehicalDetail" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tblVehicalDetail_tblVehicalType" Association="Self.FK_tblVehicalDetail_tblVehicalType">
+      <End Role="tblVehicalType" EntitySet="tblVehicalType" />
+      <End Role="tblVehicalDetail" EntitySet="tblVehicalDetail" />
+    </AssociationSet>
+    <AssociationSet Name="FK_tblVehicalName_tblVehicalCompany" Association="Self.FK_tblVehicalName_tblVehicalCompany">
+      <End Role="tblVehicalCompany" EntitySet="tblVehicalCompany" />
+      <End Role="tblVehicalName" EntitySet="tblVehicalName" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

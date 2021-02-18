@@ -1,0 +1,132 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header card-header-primary">
+                <h4 class="card-title">Add Mechanic</h4>
+                <p class="card-category"></p>
+            </div>
+            <div class="card-body">
+                <form>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">Mechanic Name</label>
+                                <input type="text" class="form-control" id="MechanicName">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">Email</label>
+                                <input type="email" class="form-control" id="Email">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">Password</label>
+                                <input type="password" class="form-control" id="Password">
+                            </div>
+                        </div>
+
+                    </div>
+                    <input type="button" value="Create" class="btn btn-primary pull-right" id="btnSave" onclick="return Add();" />
+
+                    <div class="clearfix"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header card-header-primary">
+                <h4 class="card-title ">Mechanic List</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Mechanic Name
+                                </th>
+                                <th>
+                                    Email
+                                </th>
+                                
+                            </tr>
+                        </thead>
+                        <tbody class="tbody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        loadData();
+    });
+    function Add()
+    {
+        var objVehicalType = { VehicalType: $("#MechanicName").val() };
+        if ($("#MechanicName").val().length == 0) {
+            alert("Please Enter Vehical Type Name");
+            loadData();
+        }
+        else {
+            $.ajax(
+                {
+                    type: "POST",
+                    url: '@Url.Action("AddMechanic", "ManageMechanic")',
+                    contentType: "application/json;charset=utf-8",
+                    dataType: "json",
+                    data: JSON.stringify({ MechanicName: $("#MechanicName").val(), Email: $("#Email").val(), Password: $("#Password").val() }),
+                    success: function (statuscode) {
+                        if (statuscode == true) {
+                            alert("Added New Mechanic");
+                        }
+                        else {
+                            alert("Mechanic Already Exists");
+                        }
+                        loadData();
+                        $("#MechanicName").val("");
+                        $("#Email").val("");
+                        $("#Password").val("");
+                    },
+                    error: function (responcetext) {
+                        alert(responcetext.responseText);
+                    }
+                });
+        }
+    }
+    function loadData() {
+        $.ajax({
+            url:'@Url.Action("GetMechanic", "ManageMechanic")',
+            type: "GET",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                var html = '';
+                $.each(result, function (key, item) {
+                    html += '<tr>';
+                    html += '<td>' + item.MechanicName + '</td>';
+                    html += '<td>' + item.Email + '</td>';
+                    //html += '<td>' + item.isActive + '</td>';
+                    //html += '<td><a href="#" onclick="return getbyID(' + item.Id + ')">Edit</a> | <a href="#" onclick="Delele(' + item.Id + ')">Delete</a></td>';
+                    html += '</tr>';
+                });
+                $('.tbody').html(html);
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });
+    }
+</script>
+
+

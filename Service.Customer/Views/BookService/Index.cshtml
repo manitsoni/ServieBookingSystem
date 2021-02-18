@@ -1,0 +1,184 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_CustomerLayout.cshtml";
+}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajaxy/1.6.1/scripts/jquery.ajaxy.min.js" integrity="sha512-bztGAvCE/3+a1Oh0gUro7BHukf6v7zpzrAb3ReWAVrt+bVNNphcl2tDTKCBr5zk7iEDmQ2Bv401fX3jeVXGIcA==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajaxy/1.6.1/scripts/jquery.ajaxy.js" integrity="sha512-4WpSQe8XU6Djt8IPJMGD9Xx9KuYsVCEeitZfMhPi8xdYlVA5hzRitm0Nt1g2AZFS136s29Nq4E4NVvouVAVrBw==" crossorigin="anonymous"></script>
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header card-header-primary">
+                <h4 class="card-title">Add New Vehical</h4>
+                <p class="card-category"></p>
+            </div>
+            <div class="card-body">
+                <form name="Vehical" id="Vehical" method="post">
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary("", new { @class = "text-danger" })
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">Select Vehical Type</label>
+                                @Html.DropDownList("VehicalId", (IEnumerable<SelectListItem>)ViewBag.Vehicles, "--Select Vehicle--", new { @class = "form-control", @id = "Vehicle" })
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">Enter Service Name</label>
+                                <input type="text" name="name" value="" id="Servicename" class = "form-control"/>
+                            </div>
+                        </div>
+                     
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="bmd-label-floating"></label>
+                                <input type="button" value="Add Vehical" class="btn btn-primary pull-right" id="btnSave" onclick="return Add();" />
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header card-header-primary">
+                <h4 class="card-title ">My Service List</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    ServiceName
+                                </th>
+                                <th>
+                                    VehicalName
+                                </th>
+                                <th>
+                                    Price
+                                </th>
+                                <th>
+                                    BookingDate
+                                </th>
+                                <th>
+                                    Completeddate
+                                </th>
+                                <th>
+                                    Licence Plate No.
+                                </th>
+                                <th>
+                                    Booking
+                                </th>
+                                <th>
+                                    Assigned
+                                </th>
+                                <th>
+                                    Completed
+                                </th>
+
+
+                            </tr>
+                        </thead>
+                        <tbody class="tbody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<br />
+<br />
+
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script>
+    @*function SelectedType() {
+        var type = $('#TypeId').val();
+        alert($("#TypeId").val())
+        var company = $("#CompanyId");
+
+        company.html("").append('<option selected="selected" value="0">Select Company</option>');
+        $.ajax({
+            type: 'POST',
+            url:'@Url.Action("SelectCompanyByType", "Vehical")',
+            data: { TypeId: type },
+            success: function (data) {
+                $.each(data, function (data, value) {
+                    company.append($('<option></option>').text(value.VehicalCompanyName).val(value.Id))
+                });
+            },
+        });
+    }*@
+
+</script>
+<script>
+    $(document).ready(function () {
+        loadData();
+    });
+    function Add() {
+      
+        $.ajax({
+            type: 'POST',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            url: '@Url.Action("AddService", "BookService")',
+            //data: JSON.stringify($('#Vehical').serialize()),
+            data: JSON.stringify({ VehicalId: $("#Vehicle").val(), ServiceName : $("#Servicename").val() }),
+            success: function (statuscode) {
+                if (statuscode == true) {
+                    alert("Added New Service");
+                }
+                else {
+                    alert("Vehical Company ALready Exists");
+                }
+                $("#Vehicle").val("");
+                $("#Servicename").val("");
+               
+                loadData();
+            },
+            error: function (responcetext) {
+                alert(responcetext.responseText);
+            }
+        });
+    }
+      function loadData() {
+        $.ajax({
+            url:'@Url.Action("GetServices", "BookService")',
+            type: "GET",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                var html = '';
+                $.each(result, function (key, item) {
+                    html += '<tr>';
+                    html += '<td>' + item.ServiceName + '</td>';
+                    html += '<td>' + item.VehicalName + '</td>';
+                    html += '<td>' + item.Price + '</td>';
+                    html += '<td>' + item.BookingDate + '</td>';
+                    html += '<td>' + item.CompletedDate + '</td>';
+                    html += '<td>' + item.PlateNo + '</td>';
+                    html += '<td>' + item.IsBooked + '</td>';
+                    html += '<td>' + item.IsAssigned + '</td>';
+                    html += '<td>' + item.IsCompleted + '</td>';
+                    //html += '<td><a href="#" onclick="return getbyID(' + item.Id + ')">Edit</a> | <a href="#" onclick="Delele(' + item.Id + ')">Delete</a></td>';
+                    html += '</tr>';
+                });
+                $('.tbody').html(html);
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });
+    }
+</script>
+
+

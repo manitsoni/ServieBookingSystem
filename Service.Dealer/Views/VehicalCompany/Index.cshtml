@@ -1,0 +1,123 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header card-header-primary">
+                <h4 class="card-title">Vehical Type</h4>
+                <p class="card-category"></p>
+            </div>
+            <div class="card-body">
+                <form>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">Vehical Compnay Name</label>
+                                @Html.DropDownList("Id", (IEnumerable<SelectListItem>)ViewBag.TypeList, "--Select Category--", new { @class = "form-control", @id = "TypeId" })
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">Select Vehical Type</label>
+                                <input type="text" class="form-control" id="txtName">
+                            </div>
+                        </div>
+
+                    </div>
+                    <input type="button" value="Create" class="btn btn-primary pull-right" id="btnSave" onclick="return Add();" />
+
+                    <div class="clearfix"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header card-header-primary">
+                <h4 class="card-title ">Vehical Company List</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Vehical Company Name
+                                </th>
+                                <th>
+                                    Vehical Type Name
+                                </th>
+                                <th>
+                                    Status
+                                </th>
+                                <th>
+                                    Action
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="tbody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+     $(document).ready(function () {
+        loadData();
+    });
+    function Add()
+    {
+        var objVehicalType = { VehicalType: $("#txtName").val() };
+        if ($("#txtName").val().length == 0) {
+            alert("Please Enter Vehical Type Name");
+            loadData();
+        }
+        else {
+            $.ajax(
+                {
+                    type: "POST",
+                    url: '@Url.Action("AddNewVehicalCompany", "VehicalCompany")',
+
+                    data: { Name: $("#txtName").val(), TypeId: $("#TypeId").val()},
+                    success: function (statuscode) {
+                        if (statuscode == true) {
+                            alert("Added New Vehical Company");
+                        }
+                        else {
+                            alert("Vehical Company ALready Exists");
+                        }
+                        loadData();
+                        $("#txtName").val("");
+                    }
+                });
+        }
+    }
+    function loadData() {
+        $.ajax({
+            url:'@Url.Action("GetVehicalCompany", "VehicalCompany")',
+            type: "GET",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                var html = '';
+                $.each(result, function (key, item) {
+                    html += '<tr>';
+                    html += '<td>' + item.VehicalCompanyName + '</td>';
+                    html += '<td>' + item.VehicalTypeName + '</td>';
+                    html += '<td>' + item.isActive + '</td>';
+                    html += '<td><a href="#" onclick="return getbyID(' + item.Id + ')">Edit</a> | <a href="#" onclick="Delele(' + item.Id + ')">Delete</a></td>';
+                    html += '</tr>';
+                });
+                $('.tbody').html(html);
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });
+    }
+</script>

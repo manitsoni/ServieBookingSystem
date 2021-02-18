@@ -1,0 +1,144 @@
+﻿@model BusinessEntities.ViewModel.VehicalEntities
+@using BusinessEntities.ViewModel;
+@{ 
+    var serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+    string objJson = serializer.Serialize(Model);
+}
+<form name="Vehical" id="Vehical" method="post">
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="bmd-label-floating">Select Vehical Type</label>
+                @Html.DropDownList("VehicalTypeId", (IEnumerable<SelectListItem>)ViewBag.TypeList, "--Select Type--", new { onchange = "SelectedType()", @class = "form-control", @id = "TypeId" })
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="bmd-label-floating">Select Compnay Name</label>
+                @Html.DropDownListFor(model => model.VehicalCompanyId, (IEnumerable<SelectListItem>)ViewBag.CompanyList, "--Select Company--", new { @class = "form-control", @id = "CompanyId" })
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="bmd-label-floating">Vehical Name</label>
+                @Html.EditorFor(model => model.VehicalName, new { htmlAttributes = new { @class = "form-control", @id = "VehicalName" } })
+                @Html.ValidationMessageFor(model => model.VehicalName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="bmd-label-floating">Owner Name</label>
+                @Html.EditorFor(model => model.OwnerName, new { htmlAttributes = new { @class = "form-control", @id = "OwnerName" } })
+                @Html.ValidationMessageFor(model => model.OwnerName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        @*<div class="col-md-12">
+            <div class="form-group">
+                <label class="bmd-label-floating">Registration Date</label>
+                @Html.EditorFor(model => model.RegistrationDate, new { htmlAttributes = new { @class = "form-control", @id = "RegistrationDate" } })
+                @Html.ValidationMessageFor(model => model.RegistrationDate, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="bmd-label-floating">Chassis No</label>
+                @Html.EditorFor(model => model.ChassisNo, new { htmlAttributes = new { @class = "form-control", @id = "ChassisNo" } })
+                @Html.ValidationMessageFor(model => model.ChassisNo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="bmd-label-floating">Plate Number</label>
+                @Html.EditorFor(model => model.LicencePlateNo, new { htmlAttributes = new { @class = "form-control", @id = "LicencePlateNo" } })
+                @Html.ValidationMessageFor(model => model.LicencePlateNo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label class="bmd-label-floating"></label>
+                <input type="button" value="Add Vehical" class="btn btn-primary pull-right" id="btnSave" onclick="return Add();" />
+            </div>
+        </div>
+
+    </div>
+</form>
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script>
+    function SelectedType() {
+        var type = $('#TypeId').val();
+        alert($("#TypeId").val())
+        var company = $("#CompanyId");
+
+        company.html("").append('<option selected="selected" value="0">Select Company</option>');
+        $.ajax({
+            type: 'POST',
+            url:'@Url.Action("SelectCompanyByType", "Vehical")',
+            data: { TypeId: type },
+            success: function (data) {
+                $.each(data, function (data, value) {
+                    company.append($('<option></option>').text(value.VehicalCompanyName).val(value.Id))
+                });
+            },
+        });
+    }
+
+</script>
+<script>
+
+    function Add() {
+        $.ajax({
+            type: 'POST',
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            url: '@Url.Action("AddNewVehical", "Vehical")',
+            //data: JSON.stringify($('#Vehical').serialize()),
+            data: JSON.stringify({ TypeId: $("#TypeId").val(), CompanyId: $("#CompanyId").val(), VehicalName: $("#VehicalName").val(), OwnerName: $("#OwnerName").val(), ChassisNo: $("#ChassisNo").val(), LicencePlateNo: $("#LicencePlateNo").val()}),
+            success: function (statuscode) {
+                if (statuscode == true) {
+                    alert("Added New Vehical Company");
+                }
+                else {
+                    alert("Vehical Company ALready Exists");
+                }
+                $("#TypeId").val("");
+                $("#CompanyId").val("");
+                $("#VehicalName").val("");
+                $("#OwnerName").val("");
+                $("#ChassisNo").val("");
+                $("#LicencePlateNo").val("");
+                loadData()
+            },
+            error: function (responcetext) {
+                alert(responcetext.responseText);
+            }
+        });
+    }
+      function loadData() {
+        $.ajax({
+            url:'@Url.Action("GetVehicalCompany", "VehicalCompany")',
+            type: "GET",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                var html = '';
+                $.each(result, function (key, item) {
+                    html += '<tr>';
+                    html += '<td>' + item.VehicalCompanyName + '</td>';
+                    html += '<td>' + item.VehicalTypeName + '</td>';
+                    html += '<td>' + item.isActive + '</td>';
+                    html += '<td><a href="#" onclick="return getbyID(' + item.Id + ')">Edit</a> | <a href="#" onclick="Delele(' + item.Id + ')">Delete</a></td>';
+                    html += '</tr>';
+                });
+                $('.tbody').html(html);
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });
+    }
+</script>

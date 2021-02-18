@@ -1,0 +1,16 @@
+D:\ServiceBookingSystem\ServiceBookingSystem\Data\bin\Debug\Data.dll.config
+D:\ServiceBookingSystem\ServiceBookingSystem\Data\bin\Debug\Data.dll
+D:\ServiceBookingSystem\ServiceBookingSystem\Data\bin\Debug\Data.pdb
+D:\ServiceBookingSystem\ServiceBookingSystem\Data\bin\Debug\EntityFramework.dll
+D:\ServiceBookingSystem\ServiceBookingSystem\Data\bin\Debug\EntityFramework.SqlServer.dll
+D:\ServiceBookingSystem\ServiceBookingSystem\Data\bin\Debug\EntityFramework.xml
+D:\ServiceBookingSystem\ServiceBookingSystem\Data\bin\Debug\EntityFramework.SqlServer.xml
+D:\ServiceBookingSystem\ServiceBookingSystem\Data\obj\Debug\Data.csproj.CoreCompileInputs.cache
+D:\ServiceBookingSystem\ServiceBookingSystem\Data\obj\Debug\Data.csproj.CopyComplete
+D:\ServiceBookingSystem\ServiceBookingSystem\Data\obj\Debug\Data.dll
+D:\ServiceBookingSystem\ServiceBookingSystem\Data\obj\Debug\Data.pdb
+D:\ServiceBookingSystem\ServiceBookingSystem\Data\bin\Debug\BusinessEntities.dll
+D:\ServiceBookingSystem\ServiceBookingSystem\Data\bin\Debug\BusinessEntities.pdb
+D:\ServiceBookingSystem\ServiceBookingSystem\Data\obj\Debug\Data.csprojAssemblyReference.cache
+D:\ServiceBookingSystem\ServiceBookingSystem\Data\bin\Debug\Common.dll
+D:\ServiceBookingSystem\ServiceBookingSystem\Data\bin\Debug\Common.pdb

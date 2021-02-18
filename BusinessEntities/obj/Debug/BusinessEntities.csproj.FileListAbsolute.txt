@@ -1,0 +1,6 @@
+D:\ServiceBookingSystem\BusinessEntities\bin\Debug\BusinessEntities.dll
+D:\ServiceBookingSystem\BusinessEntities\bin\Debug\BusinessEntities.pdb
+D:\ServiceBookingSystem\BusinessEntities\obj\Debug\BusinessEntities.csproj.CoreCompileInputs.cache
+D:\ServiceBookingSystem\BusinessEntities\obj\Debug\BusinessEntities.dll
+D:\ServiceBookingSystem\BusinessEntities\obj\Debug\BusinessEntities.pdb
+D:\ServiceBookingSystem\BusinessEntities\obj\Debug\BusinessEntities.csprojAssemblyReference.cache
